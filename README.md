@@ -15,11 +15,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/popover.png" alt="The Noir Receiver popover: cover, song, scrubber and playback controls" width="306">
-</p>
-
-<p align="center">
-  <img src="assets/menubar.png" alt="The menu bar: the Noir mark moving to the music, with the song's title and artist beside it" width="215">
+  <img src="assets/demo.gif" alt="Picking the Mac in Noir Player's output picker: the song moves to the Mac's menu bar, and its popover shows the cover, scrubber and controls" width="874">
 </p>
 
 - **Lossless.** CD-quality audio over your Wi-Fi.

@@ -24,6 +24,10 @@ Bump `ReceiverVersion` in `Receiver.swift`, then push a tag `v` + that version.
   Noir Didone face), not drawn by hand. Don't edit it here.
 - `assets/popover.png` and `assets/menubar.png` come from `scripts/readme-shots.py`, which drives
   the real installed app with a made-up phone and track. Re-run it after a UI change.
+- `assets/demo.gif` is a real screen recording: the phone (`adb shell screenrecord`) beside the
+  menu bar region (`screencapture -v -R…`), stacked and trimmed with ffmpeg, then converted with
+  ordered dithering, which keeps it near 1 MB where error diffusion came out at 7 to 11:
+  `ffmpeg -i demo.mp4 -vf "fps=15,scale=874:-2:flags=lanczos,split[a][b];[a]palettegen=max_colors=192:stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle" -loop 0 demo.gif`
 
 ## Build and run
 
