@@ -2,7 +2,11 @@
 # compiles with the user's toolchain, and only an old one catches syntax newer than MIN_OS's Macs
 # can build (the `weak let` found 2026-10-28). `preview` is left out: it needs a window server.
 name: check
-on: [push, pull_request]
+# Branches only: a release tag points at a commit this already checked on main.
+on:
+  push:
+    branches: [main]
+  pull_request:
 jobs:
   check:
     strategy:

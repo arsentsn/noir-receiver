@@ -19,13 +19,16 @@ curl -fsSL https://raw.githubusercontent.com/arsentsn/noir-receiver/main/install
 ```
 
 It puts Noir Receiver in your Applications folder and starts it. Run the same line again to update.
-Installed this way, macOS does not show its "cannot verify the developer" warning.
+Installed this way, macOS does not show its *"Apple could not verify 'Noir Receiver' is free of
+malware"* warning (on older macOS: *"cannot be opened because the developer cannot be verified"*).
 ([What the script does](install.sh): download, unzip, move to Applications, open.)
 
 **Or download it yourself.** Get
 [Noir-Receiver.zip](https://github.com/arsentsn/noir-receiver/releases/latest/download/Noir-Receiver.zip),
-open it, and drag **Noir Receiver** into Applications. The first time you open it, macOS refuses,
-because the app is not signed with a paid Apple developer account. Click **Done**, then open
+open it, and drag **Noir Receiver** into Applications. The first time you open it, macOS refuses
+with *"Apple could not verify 'Noir Receiver' is free of malware"* (on older macOS: *"cannot be
+opened because the developer cannot be verified"*), because the app is not signed with a paid
+Apple developer account. Click **Done**, then open
 **System Settings → Privacy & Security**, scroll down, and click **Open Anyway**. You only do this
 once (and again after each manual update).
 
@@ -164,8 +167,7 @@ cast start used to open two sessions a second apart (the phone's header race, fi
 the same day), so two engines ran for that second on every start.
 
 It advertises itself over Bonjour as `_noirplayer._tcp`, so the phone finds it
-without you typing an IP. In Noir Player: **Settings → Experimental → Stream to
-a computer** on, then the cast button in the full-screen player, then pick your Mac.
+without you typing an IP (the phone-side steps are under *Install*).
 
 The TXT record carries `v` (the protocol version) and `kind` — `laptop` or
 `desktop`, which is the icon the phone's picker draws. **`kind` is decided by
