@@ -2,7 +2,7 @@
 // things a port gets wrong silently.
 //
 // **Why a harness rather than a unit test.** There is no test target here — one core, three `@main`
-// entry points, no Xcode project and no SwiftPM manifest (see `README.md`). Adding a test runner to
+// entry points, no Xcode project and no SwiftPM manifest (see `DEVELOPING.md`). Adding a test runner to
 // buy four assertions is more machinery than the assertions are worth; a fourth `@main` costs one
 // line in `build.sh` and matches how `Preview.swift` already measures the real views.
 //

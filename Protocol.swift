@@ -1,7 +1,7 @@
 // The wire format, both ends of it: constants, frame types, and the parsers for every value the
 // phone sends. Nothing here opens a socket or a device — `Session` reads the stream and calls in.
 //
-// Protocol (see README § Protocol):
+// Protocol (see DEVELOPING.md § Protocol):
 //   1. 8-byte preamble each way: "NOIR", version byte, three reserved bytes.
 //      A stream opening with "RIFF" instead is a pre-versioning sender (v0).
 //   2. 44-byte canonical WAV header.
