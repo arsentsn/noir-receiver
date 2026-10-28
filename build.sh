@@ -130,6 +130,11 @@ if [[ $target == all || $target == app ]]; then
 </dict>
 </plist>
 PLIST
+  # Ad-hoc signature over the *whole bundle*: the linker signs only the binary, leaving Info.plist
+  # and the icon unsealed, so `codesign --verify` failed on every build. Ad-hoc is free and needs
+  # no Apple account. It is not a Developer ID, so a browser-downloaded copy still meets
+  # Gatekeeper; install.sh is the route that does not.
+  codesign --force --sign - "$APP"
   # No backticks in this string: zsh runs them. The first version said "\`open\` alone will not"
   # and printed open(1)'s usage instead.
   print "built $APP $VERSION (${(j:+:)ARCHS}) at $BUILT_AT — relaunch it; open(1) alone will not"

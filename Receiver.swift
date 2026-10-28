@@ -14,7 +14,7 @@ import SystemConfiguration
 /// this line for the bundle's `Info.plist`, the CLI prints it for `--version`, and Settings
 /// shows it — so a bug report can say which build it is about once there are downloads.
 /// Semantic-ish: the middle number moves when the wire format gains a frame.
-public let ReceiverVersion = "0.4.0"
+public let ReceiverVersion = "1.0.0"
 
 /// What the buffer slider defaults to. The old default was four of the phone's ~46 ms
 /// chunks, so this is that figure rounded to a number a person would pick.

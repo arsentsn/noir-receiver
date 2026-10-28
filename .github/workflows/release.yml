@@ -1,0 +1,26 @@
+# Push a tag `vX.Y.Z` (matching `ReceiverVersion` in Receiver.swift) and this attaches
+# `Noir-Receiver.zip` to a GitHub release. `install.sh` and the README's download link both fetch
+# `releases/latest/download/Noir-Receiver.zip`, so the asset name is the contract: keep it.
+name: release
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tag matches ReceiverVersion
+        run: |
+          v=$(sed -n 's/^public let ReceiverVersion = "\([^"]*\)".*/\1/p' Receiver.swift)
+          [ "v$v" = "$GITHUB_REF_NAME" ] || { echo "tag $GITHUB_REF_NAME, source says $v"; exit 1; }
+      # The tests ran on this commit's push (check.yml); this job only packages.
+      - run: ./build.sh app universal
+      - name: Zip
+        run: ditto -c -k --keepParent "Noir Receiver.app" Noir-Receiver.zip
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" Noir-Receiver.zip --title "Noir Receiver ${GITHUB_REF_NAME#v}" --generate-notes

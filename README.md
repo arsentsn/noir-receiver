@@ -7,18 +7,49 @@ song, artwork and play/pause/skip in the menu bar.
 Android cannot AirPlay to a Mac, and macOS cannot be a Bluetooth speaker for a phone, so this
 small receiver is the missing end. It finds the phone through Bonjour; nothing to configure.
 
-**Needs** macOS 13 or later and the Xcode command-line tools (`xcode-select --install`). No other
-dependencies.
+## Install
+
+Needs macOS 13 or later, on any Mac (Apple silicon or Intel).
+
+**The easy way: one line in Terminal.** Open Terminal (press ⌘ Space, type *Terminal*, press
+Return), paste this line, press Return:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/arsentsn/noir-receiver/main/install.sh | sh
+```
+
+It puts Noir Receiver in your Applications folder and starts it. Run the same line again to update.
+Installed this way, macOS does not show its "cannot verify the developer" warning.
+([What the script does](install.sh): download, unzip, move to Applications, open.)
+
+**Or download it yourself.** Get
+[Noir-Receiver.zip](https://github.com/arsentsn/noir-receiver/releases/latest/download/Noir-Receiver.zip),
+open it, and drag **Noir Receiver** into Applications. The first time you open it, macOS refuses,
+because the app is not signed with a paid Apple developer account. Click **Done**, then open
+**System Settings → Privacy & Security**, scroll down, and click **Open Anyway**. You only do this
+once (and again after each manual update).
+
+**Then:**
+1. When macOS asks whether Noir Receiver may find devices on your local network, click **Allow**.
+2. On your phone, in Noir Player, turn on **Settings → Stream to Noir Receiver** (search "receiver").
+3. Open the player's output picker and choose your Mac. The first time, your Mac asks you to
+   **Allow** the phone, from the menu bar.
+
+To start it with your Mac, open its settings from the gear in its menu bar popover and turn on
+**Start at login**.
+
+**Uninstall:** quit it from its menu bar popover and drag it from Applications to the Trash.
+
+**From source**, for developers: needs the Xcode command-line tools (`xcode-select --install`).
 
 ```sh
 git clone https://github.com/arsentsn/noir-receiver.git
 cd noir-receiver && ./build.sh app && open "Noir Receiver.app"
 ```
 
-Allow the Local Network prompt on first launch. In Noir Player, turn on **Settings → Stream to
-Noir Receiver** (search "receiver"), then pick this Mac in the player's output picker; the first
-time, the menu bar asks you to Allow the phone.
-A locally built app is never quarantined, so Gatekeeper does not ask. MIT licensed.
+**Releasing:** bump `ReceiverVersion` in `Receiver.swift`, then push a tag `v` + that version;
+`.github/workflows/release.yml` builds the universal, ad-hoc signed app and attaches
+`Noir-Receiver.zip`, the name `install.sh` and the link above fetch. MIT licensed.
 
 ## Build and run
 
@@ -30,7 +61,7 @@ A locally built app is never quarantined, so Gatekeeper does not ask. MIT licens
 open "Noir Receiver.app"   # menu bar: now playing, transport, scrubber, settings
 ./build.sh preview && ./preview   # measure the popover and settings window offscreen, drive pairing
 ./build.sh check && ./eq-check     # the mark's analyser against known signals — no phone, no audio device
-./build.sh app universal   # arm64 + x86_64 in one binary, for a download rather than a brew build
+./build.sh app universal   # arm64 + x86_64 in one binary: what a release ships
 ./check.sh                 # every target, then eq-check, protocol-test.py and preview: before a commit
 ```
 
@@ -38,7 +69,7 @@ open "Noir Receiver.app"   # menu bar: now playing, transport, scrubber, setting
 is the one place that number is written — it also fills the bundle's `LSMinimumSystemVersion`.
 Without the flag swiftc checks API availability against the Mac doing the building, which is
 how the plist said 13.0 for weeks while the settings window used a macOS 14 `onChange` and
-nothing objected until 2026-09-04. A brew formula compiles on the *user's* Mac, so that is where
+nothing objected until 2026-09-04. A source build compiles on the *user's* Mac, so that is where
 such an error would have surfaced. The version is `ReceiverVersion` in `Receiver.swift`,
 read by `build.sh` into the plist, printed by `--version`, shown at the foot of Settings.
 
@@ -64,11 +95,11 @@ The files, by what they are:
   (the layout and pairing harness) and `EqAnalyserCheck.swift` (the analyser's assertions).
 
 No dependencies — AVFoundation, Network, MediaPlayer and SwiftUI are part of macOS (13+ for the
-app). The bundle is assembled by `build.sh`, no Xcode project. Unsigned: fine when built locally (brew formula or this script),
-since a local build is never quarantined. A *downloaded* copy is blocked on first open; on
-macOS 15 and later right-click → Open no longer gets past that, so the steps are: open it once,
-dismiss the warning, then **System Settings → Privacy & Security → Open Anyway** (on macOS 14 and
-earlier right-click → Open still works). Either way it is once per download.
+app). The bundle is assembled by `build.sh`, no Xcode project, and ad-hoc signed (free, no Apple
+account; not a Developer ID). Gatekeeper only checks files carrying the quarantine flag that
+browsers attach. A local build and a copy fetched by `install.sh` (curl) carry none, so they open
+straight away; a browser download is blocked on first open, and on macOS 15 and later
+right-click → Open no longer gets past that, hence the Open Anyway steps under *Install*.
 
 The bundle declares `NSLocalNetworkUsageDescription` and `NSBonjourServices` (`_noirplayer._tcp`),
 for the Local Network permission macOS 15 asks for before an app can be found on the network.
