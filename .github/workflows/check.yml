@@ -1,0 +1,17 @@
+# macos-14's default Xcode (15.x, Swift 5.10) is the point: a brew formula
+# compiles with the user's toolchain, and only an old one catches syntax newer than MIN_OS's Macs
+# can build (the `weak let` found 2026-10-28). `preview` is left out: it needs a window server.
+name: check
+on: [push, pull_request]
+jobs:
+  check:
+    strategy:
+      matrix:
+        os: [macos-14, macos-15]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: swiftc --version
+      - run: ./build.sh
+      - run: ./eq-check
+      - run: ./protocol-test.py
